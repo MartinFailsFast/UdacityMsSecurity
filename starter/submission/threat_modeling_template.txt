@@ -1,0 +1,98 @@
+List of successfull fixes Docker Threat:
+1)
+[FAIL] 5.10 Ensure that the memory usage for container is limited (Scored)
+docker run -m 512m opensuse/leap sleep 60
+docker inspect no-limit | grep -i mem
+docker inspect limited | grep -i mem
+[FAIL] 5.22 Ensure that docker exec commands are not used with the privileged option (Scored)
+docker exec -it 6ad8d28d14ed bash >> use exec without --priviliged mode
+
+2)
+[FAIL] 2.2.b Ensure the logging level is set to 'info' (Scored)
+sudo nano /etc/docker/daemon.json
+{
+  "log-level": "info"
+}
+sudo systemctl restart docker
+docker info | grep "Logging"
+journalctl -u docker.service | grep -i "level"
+
+3)
+[FAIL] 3.17 Ensure that the daemon.json file ownership is set to root:root
+chown root:root /etc/docker/daemon.json
+
+4)
+[FAIL] 3.18 Ensure that daemon.json file permissions are set to 644 or more
+restrictive (Scored)
+chmod 644 /etc/docker/daemon.json
+
+5)
+[FAIL] 2.14.a Ensure Userland Proxy is Disabled (Scored)
+sudo nano /etc/systemd/system/docker.service.d/override.conf
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd --userland-proxy=false -H fd://
+
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+ps aux | grep dockerd
+
+docker ps -q | xargs -r docker stop
+
+
+
+
+-------------------------
+List of failed fixes:
+
+1)
+[FAIL] 2.17.a Ensure containers are restricted from acquiring new privileges (Scored)
+[FAIL] 2.17.b Ensure containers are restricted from acquiring new privileges (Scored)
+sudo systemctl edit docker.service
+
+docker run  --rm -it -m 512m --security-opt=no-new-privileges opensuse/leap bash
+
+
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd --no-new-privileges --userland-proxy=false -H fd://
+
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+sudo nano /etc/docker/daemon.json
+
+
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+{
+  "log-level": "info",
+  "ipv6": false,
+  "default-runtime": "runc-nnp",
+  "runtimes": {
+    "runc-nnp": {
+      "path": "runc",
+      "runtimeArgs": ["--no-new-privileges"]
+    }
+  }
+}
+
+
+
+2)
+[FAIL] 2.14.b Disable Userland Proxy (Scored)
+
+3)
+[FAIL] 2.8 Enable user namespace support (Scored)
+sudo nano /etc/docker/daemon.json
+{
+  "userns-remap": "default"
+}
+sudo systemctl restart docker
