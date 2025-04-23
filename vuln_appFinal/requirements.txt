@@ -1,0 +1,20 @@
+aiohttp #==3.10.11       # Updated to avoid vulnerability GHSA-8495-4g3g-x7pr
+aiohttp-jinja2 #==1.2.0
+aiohttp-session #==2.7.0
+aiopg #==1.2.0
+aioredis #==1.2.0
+async-timeout #>=4.0,<=6.0
+attrs #==19.3.0
+chardet #==3.0.4
+hiredis # ==1.0.1
+idna #==2.8
+markupsafe #==1.1.1
+multidict #==4.7.6
+psycopg2 #==2.8.6
+trafaret #==1.2.0
+trafaret-config #==2.0.2
+yarl #>=1.12.0,<=1.99.99
+jinja2==3.1.6
+pyyaml==6.0.2
+redis
+

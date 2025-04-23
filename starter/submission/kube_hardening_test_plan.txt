@@ -1,0 +1,13 @@
+Write at least 200 words describing a Kubernetes-specific test plan based on what you learned from the course. The test plan does not need to address specific hardening steps. Answer these two questions in your test plan:
+1) How will you test the changes?
+We will change and test the config on dev cluster 
+After this we can rollout to preprod cluster. Here we mimics of production services and can examine if there is any impact on directly and indirectly involved services.
+2) How will you ensure the changes don't negatively affect your cluster?
+- We will monitor metrics with prometheus and our Grafana observability dashboard and check for any negative impact like increased latency, alarms or missing data.
+- We will also do some basic function tests with our microservices in preprod to examine that all processes still work correctly
+- We will apply a basic load test to check if there is any impact when increasing the load.
+3) Documentation and Rollback
+We will also setup a git project and a new branch for the security changes. This enables us to persist config especially cluster.yml before changes.
+All changes and config steps should be documented and we will create screenshots of security tests (kube-bench and docker-bench) before and after config changes
+In case of negative impacts we van do a quick rollback to previous configuration.
+4) Prod Rollout Recommendation: After preprod observation for at least 5 working days we could create a ticket for a change on prod system and plan final rollout. 

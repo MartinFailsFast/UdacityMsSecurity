@@ -53,7 +53,15 @@ services:
     backup_config: null
   kube-api:
     image: ""
-    extra_args: {}
+    advertise_address: 192.168.50.101
+    tls-san:
+      - "192.168.50.101"
+      - "10.0.2.15"
+      - "localhost" 
+    extra_args:
+      kubelet-certificate-authority: "/etc/kubernetes/ssl/kube-ca.pem"
+      #enable-admission-plugins: "NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,EventRateLimit,NodeRestriction"
+      #admission-control-config-file: "/etc/kubernetes/admission-config.yaml"
     extra_binds: []
     extra_env: []
     win_extra_args: {}
@@ -115,7 +123,11 @@ network:
   tolerations: []
 authentication:
   strategy: x509
-  sans: []
+  sans:
+    - 192.168.50.101
+    - 10.0.2.15
+    - localhost
+    - 127.0.0.1
   webhook: null
 addons: ""
 addons_include: []
@@ -162,7 +174,7 @@ system_images:
   aci_opflex_server_container: noiro/opflex-server:5.1.1.0.1ae238a
 ssh_key_path: ~/.ssh/id_rsa
 ssh_cert_path: ""
-ssh_agent_auth: true # false
+ssh_agent_auth: true #true # false
 authorization:
   mode: rbac
   options: {}
