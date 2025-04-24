@@ -1,0 +1,29 @@
+1. Incident commander name:
+Martin Book
+
+2. Executive Summary of what happened:
+Somebody launched three new pods in default namespace as you can see in this list:
+default         cryptotonight                                                     1/1     Running            1          3h4m
+default         minergate                                                         0/1     ImagePullBackOff   0          3h4m*
+default         moneropool                                                        1/1     Running            0          3h4m
+default         stress-demo-54b568b584-8dqtv                                      1/1     Running            0          151m
+
+* Image is no more available. I deployed  "image: progrium/stress" instead to demo increased workload
+We were able to detect them quickly
+
+3. Summary of what was affected:
+It seems like the attack was only partial successfull.
+I saw increased workload in the default namespace (AttackDashboard2025-04-24 15-32-09.png) 
+and alerts in Falco Dashboard:
+Warning Sensitive file opened for reading by non-trusted program (file=/etc/shadow gparent=systemd ggparent=<NA> gggparent=<NA> evt_type=open user=root user_uid=0 user_loginuid=-1 process=cat proc_exepath=/bin/cat parent=containerd-shim command=cat /etc/shadow terminal=34816 container_id=983892a322b7 container_name=k8s_stress_stress-demo-54b568b584-8dqtv_default_487ae8ad-3f69-410a-9243-b4cde2e21137_0)
+
+4. Summmry of the impact:
+Someone was able to create new pods and tried to get sensitive data. 
+The attacker attempted to steal usernames and hashed passwords 
+
+5. Summary of the remediation steps:
+The admin has discovered the suspicious activities with our Grafana dashboards. Therefore we were able to detect the attack quickly and to delete the pods.
+
+6. Summary of lessons learned:
+We should check the Kubernetes API server access, check our security concept to find out how the attacker got access.
+I will immediatly generate new access keys to prevent further attacks 
