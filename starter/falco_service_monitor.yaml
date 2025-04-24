@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    release: kube-prometheus-stack-1670613497 # CHANGE THIS VALUE
+    release: kube-prometheus-stack-1745482883 #kube-prometheus-stack-18.0.8 kube-prometheus-stack-1670613497 # CHANGE THIS VALUE
   name: falco-exporter-servicemonitor
   namespace: falco
 spec:
