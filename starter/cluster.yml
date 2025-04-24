@@ -57,7 +57,9 @@ services:
     tls-san:
       - "192.168.50.101"
       - "10.0.2.15"
-      - "localhost" 
+      - "localhost"
+      - "127.0.0.1"
+      - "node1" 
     extra_args:
       kubelet-certificate-authority: "/etc/kubernetes/ssl/kube-ca.pem"
       #enable-admission-plugins: "NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,EventRateLimit,NodeRestriction"
@@ -95,7 +97,8 @@ services:
     win_extra_env: []
   kubelet:
     image: ""
-    extra_args: {}
+    extra_args:
+      node-ip: 192.168.50.101 # neu 23.04 21h
     extra_binds: []
     extra_env: []
     win_extra_args: {}
@@ -105,7 +108,7 @@ services:
     infra_container_image: ""
     cluster_dns_server: 10.43.0.10
     fail_swap_on: false
-    generate_serving_certificate: false
+    generate_serving_certificate: true  # neu 24.04 false
   kubeproxy:
     image: ""
     extra_args: {}
